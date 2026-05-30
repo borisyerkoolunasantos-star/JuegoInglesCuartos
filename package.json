@@ -1,0 +1,15 @@
+{
+  "name": "be-going-to-game",
+  "version": "1.0.0",
+  "description": "Juego interactivo de inglés: Be Going To",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "socket.io": "^4.6.1",
+    "xlsx": "^0.18.5"
+  },
+  "engines": { "node": ">=16.0.0" }
+}

@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Be Going To — English Game</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --sky: #4FC3F7;
+    --sky-dark: #0288D1;
+    --sun: #FFD600;
+    --grass: #66BB6A;
+    --grass-dark: #388E3C;
+    --white: #FFFFFF;
+    --navy: #1A237E;
+    --coral: #FF6B6B;
+    --purple: #7C4DFF;
+    --mint: #00E5CC;
+  }
+
+  body {
+    min-height: 100vh;
+    background: linear-gradient(180deg, #87CEEB 0%, #B0E0FF 50%, #90EE90 50%, #5DBB63 100%);
+    font-family: 'Nunito', sans-serif;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  /* Animated clouds */
+  .cloud {
+    position: absolute;
+    background: white;
+    border-radius: 50px;
+    opacity: 0.85;
+    animation: drift linear infinite;
+  }
+  .cloud::before, .cloud::after {
+    content: '';
+    position: absolute;
+    background: white;
+    border-radius: 50%;
+  }
+  .cloud-1 { width:120px; height:40px; top:8%; left:-130px; animation-duration:20s; animation-delay:0s; }
+  .cloud-1::before { width:60px; height:60px; top:-30px; left:20px; }
+  .cloud-1::after { width:45px; height:45px; top:-20px; left:55px; }
+  .cloud-2 { width:90px; height:30px; top:15%; left:-100px; animation-duration:28s; animation-delay:8s; }
+  .cloud-2::before { width:45px; height:45px; top:-22px; left:15px; }
+  .cloud-2::after { width:35px; height:35px; top:-15px; left:42px; }
+  .cloud-3 { width:150px; height:45px; top:5%; left:-160px; animation-duration:35s; animation-delay:14s; }
+  .cloud-3::before { width:70px; height:70px; top:-35px; left:25px; }
+  .cloud-3::after { width:55px; height:55px; top:-25px; left:75px; }
+
+  @keyframes drift { from { left: -200px; } to { left: 110vw; } }
+
+  /* Sun */
+  .sun {
+    position: absolute;
+    top: 30px; right: 80px;
+    width: 90px; height: 90px;
+    background: var(--sun);
+    border-radius: 50%;
+    box-shadow: 0 0 40px rgba(255,214,0,0.7), 0 0 80px rgba(255,214,0,0.3);
+    animation: pulse 3s ease-in-out infinite;
+  }
+  .sun::before {
+    content: '☀️';
+    font-size: 70px;
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.08); } }
+
+  /* Birds */
+  .bird { position: absolute; font-size: 24px; animation: flyBird 12s linear infinite; }
+  .bird-1 { top: 12%; animation-delay: 0s; }
+  .bird-2 { top: 20%; animation-delay: 4s; font-size: 18px; }
+  @keyframes flyBird { from { left: -50px; transform: scaleX(1); } to { left: 110vw; transform: scaleX(1); } }
+
+  /* Main container */
+  .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 40px 20px;
+    position: relative;
+    z-index: 10;
+  }
+
+  /* Title card */
+  .title-card {
+    background: white;
+    border-radius: 30px;
+    padding: 40px 60px;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.15), 0 4px 0 #1A237E;
+    max-width: 680px;
+    width: 100%;
+    margin-bottom: 40px;
+    animation: bounceIn 0.7s cubic-bezier(0.34,1.56,0.64,1);
+    position: relative;
+    overflow: hidden;
+  }
+  .title-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 8px;
+    background: linear-gradient(90deg, #FF6B6B, #FFD600, #66BB6A, #4FC3F7, #7C4DFF);
+  }
+
+  @keyframes bounceIn {
+    0% { transform: scale(0.5) translateY(-60px); opacity: 0; }
+    100% { transform: scale(1) translateY(0); opacity: 1; }
+  }
+
+  .flag-row { font-size: 40px; margin-bottom: 16px; }
+  h1 {
+    font-family: 'Fredoka One', cursive;
+    font-size: 52px;
+    color: var(--navy);
+    line-height: 1.1;
+    margin-bottom: 8px;
+  }
+  h1 span { color: var(--coral); }
+  .subtitle {
+    font-size: 18px;
+    color: #666;
+    font-weight: 600;
+    margin-bottom: 24px;
+  }
+
+  .badge-row {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 8px;
+  }
+  .badge {
+    background: linear-gradient(135deg, #E8F5E9, #C8E6C9);
+    border: 2px solid #66BB6A;
+    color: #2E7D32;
+    font-size: 13px;
+    font-weight: 800;
+    padding: 6px 16px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  /* Choice cards */
+  .cards-row {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 700px;
+    width: 100%;
+  }
+
+  .role-card {
+    flex: 1;
+    min-width: 240px;
+    max-width: 300px;
+    background: white;
+    border-radius: 24px;
+    padding: 36px 28px;
+    text-align: center;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.3s cubic-bezier(0.34,1.56,0.64,1);
+    border: 3px solid transparent;
+    animation: bounceIn 0.7s cubic-bezier(0.34,1.56,0.64,1) backwards;
+  }
+  .role-card:nth-child(1) { animation-delay: 0.15s; }
+  .role-card:nth-child(2) { animation-delay: 0.3s; }
+
+  .role-card:hover {
+    transform: translateY(-8px) scale(1.03);
+    box-shadow: 0 24px 60px rgba(0,0,0,0.2);
+  }
+  .role-card.teacher { border-color: #7C4DFF; }
+  .role-card.teacher:hover { background: linear-gradient(135deg, #EDE7F6, #D1C4E9); }
+  .role-card.student { border-color: #FF6B6B; }
+  .role-card.student:hover { background: linear-gradient(135deg, #FFF3E0, #FFCCBC); }
+
+  .role-icon {
+    font-size: 64px;
+    margin-bottom: 16px;
+    display: block;
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
+  }
+  .role-title {
+    font-family: 'Fredoka One', cursive;
+    font-size: 26px;
+    margin-bottom: 8px;
+  }
+  .role-card.teacher .role-title { color: var(--purple); }
+  .role-card.student .role-title { color: var(--coral); }
+  .role-desc {
+    font-size: 14px;
+    color: #777;
+    font-weight: 600;
+    line-height: 1.5;
+  }
+
+  .role-btn {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 12px 28px;
+    border-radius: 50px;
+    font-family: 'Fredoka One', cursive;
+    font-size: 16px;
+    font-weight: 400;
+    transition: all 0.2s;
+    color: white;
+  }
+  .role-card.teacher .role-btn { background: var(--purple); }
+  .role-card.student .role-btn { background: var(--coral); }
+  .role-card:hover .role-btn { transform: scale(1.05); }
+
+  /* Footer grass decoration */
+  .grass-bottom {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    height: 60px;
+    background: var(--grass-dark);
+    z-index: 1;
+  }
+  .grass-bottom::before {
+    content: '';
+    position: absolute;
+    top: -20px; left: 0; right: 0;
+    height: 30px;
+    background: radial-gradient(ellipse 30px 20px at 15px 20px, var(--grass) 50%, transparent 55%),
+                radial-gradient(ellipse 25px 18px at 45px 18px, var(--grass) 50%, transparent 55%),
+                radial-gradient(ellipse 30px 20px at 75px 20px, var(--grass) 50%, transparent 55%),
+                radial-gradient(ellipse 28px 19px at 108px 19px, var(--grass) 50%, transparent 55%),
+                radial-gradient(ellipse 30px 20px at 140px 20px, var(--grass) 50%, transparent 55%),
+                radial-gradient(ellipse 25px 18px at 170px 18px, var(--grass) 50%, transparent 55%),
+                radial-gradient(ellipse 30px 20px at 200px 20px, var(--grass) 50%, transparent 55%),
+                radial-gradient(ellipse 28px 19px at 232px 19px, var(--grass) 50%, transparent 55%),
+                radial-gradient(ellipse 30px 20px at 262px 20px, var(--grass) 50%, transparent 55%),
+                radial-gradient(ellipse 25px 18px at 290px 18px, var(--grass) 50%, transparent 55%);
+    background-size: 300px 30px;
+    background-repeat: repeat-x;
+  }
+
+  /* floating emojis */
+  .floater {
+    position: absolute;
+    font-size: 28px;
+    animation: floatAnim 6s ease-in-out infinite;
+    opacity: 0.7;
+    pointer-events: none;
+    z-index: 5;
+  }
+  @keyframes floatAnim {
+    0%,100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-20px) rotate(10deg); }
+  }
+</style>
+</head>
+<body>
+
+<!-- Sky elements -->
+<div class="cloud cloud-1"></div>
+<div class="cloud cloud-2"></div>
+<div class="cloud cloud-3"></div>
+<div class="sun"></div>
+<div class="bird bird-1">🐦</div>
+<div class="bird bird-2">🦅</div>
+
+<!-- Floating emojis -->
+<div class="floater" style="top:65%;left:5%;animation-delay:0s">📚</div>
+<div class="floater" style="top:70%;left:90%;animation-delay:2s">✏️</div>
+<div class="floater" style="top:60%;left:85%;animation-delay:4s">🌟</div>
+<div class="floater" style="top:75%;left:8%;animation-delay:1s">🎒</div>
+
+<div class="container">
+  <div class="title-card">
+    <div class="flag-row">🇬🇧 🇺🇸</div>
+    <h1>Be <span>Going To</span></h1>
+    <p class="subtitle">Interactive English Grammar Game</p>
+    <div class="badge-row">
+      <span class="badge">📝 Fill in Blanks</span>
+      <span class="badge">✅ Multiple Choice</span>
+      <span class="badge">🏆 Scoreboard</span>
+      <span class="badge">⚡ Real-time</span>
+    </div>
+  </div>
+
+  <div class="cards-row">
+    <a href="/docente" class="role-card teacher">
+      <span class="role-icon">👩‍🏫</span>
+      <div class="role-title">Teacher</div>
+      <div class="role-desc">Create a session, configure questions, and monitor your students in real time.</div>
+      <span class="role-btn">Enter as Teacher</span>
+    </a>
+
+    <a href="/alumno" class="role-card student">
+      <span class="role-icon">🧑‍🎓</span>
+      <div class="role-title">Student</div>
+      <div class="role-desc">Join with your class code and compete to get the highest score!</div>
+      <span class="role-btn">Enter as Student</span>
+    </a>
+  </div>
+</div>
+
+<div class="grass-bottom"></div>
+
+</body>
+</html>
