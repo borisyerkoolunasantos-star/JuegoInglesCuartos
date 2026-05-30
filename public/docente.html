@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Teacher Panel — Be Going To</title>
+<title>Panel Docente — Be Going To</title>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
 <script src="/socket.io/socket.io.js"></script>
 <style>
@@ -11,259 +11,200 @@
   :root {
     --purple:#7C4DFF; --purple-light:#EDE7F6; --purple-dark:#5E35B1;
     --coral:#FF6B6B; --sun:#FFD600; --green:#66BB6A; --green-dark:#388E3C;
-    --navy:#1A237E; --sky:#4FC3F7; --white:#fff;
-    --bg:#F3F0FF; --card:#fff; --text:#2D2D2D; --muted:#777;
+    --navy:#1A237E; --white:#fff; --bg:#F3F0FF; --text:#2D2D2D; --muted:#777;
   }
-  body { background: var(--bg); font-family:'Nunito',sans-serif; color:var(--text); min-height:100vh; }
+  body { background:var(--bg); font-family:'Nunito',sans-serif; color:var(--text); min-height:100vh; }
 
-  /* HEADER */
   header {
-    background: linear-gradient(135deg, var(--purple), var(--purple-dark));
-    padding: 18px 32px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    box-shadow: 0 4px 20px rgba(124,77,255,0.3);
-    position: sticky; top: 0; z-index: 100;
+    background:linear-gradient(135deg,var(--purple),var(--purple-dark));
+    padding:18px 32px; display:flex; align-items:center; justify-content:space-between;
+    box-shadow:0 4px 20px rgba(124,77,255,0.3); position:sticky; top:0; z-index:100;
   }
-  .logo { font-family:'Fredoka One',cursive; font-size:26px; color:white; display:flex; align-items:center; gap:10px; }
-  .logo span { background:white; color:var(--purple); padding:2px 12px; border-radius:20px; font-size:20px; }
-  .header-right { display:flex; align-items:center; gap:16px; }
-  .back-btn {
-    background:rgba(255,255,255,0.2); color:white; border:2px solid rgba(255,255,255,0.4);
-    padding:8px 18px; border-radius:20px; font-family:'Nunito',sans-serif; font-weight:700;
-    cursor:pointer; font-size:14px; transition:all 0.2s; text-decoration:none;
-  }
+  .logo { font-family:'Fredoka One',cursive; font-size:24px; color:white; display:flex; align-items:center; gap:10px; }
+  .logo span { background:white; color:var(--purple); padding:2px 12px; border-radius:20px; font-size:18px; }
+  .back-btn { background:rgba(255,255,255,0.2); color:white; border:2px solid rgba(255,255,255,0.4); padding:8px 18px; border-radius:20px; font-family:'Nunito',sans-serif; font-weight:700; cursor:pointer; font-size:14px; text-decoration:none; transition:all 0.2s; }
   .back-btn:hover { background:rgba(255,255,255,0.35); }
 
-  .main { max-width: 1200px; margin: 0 auto; padding: 32px 24px; }
+  .main { max-width:1100px; margin:0 auto; padding:32px 24px; }
 
-  /* SETUP PANEL */
-  .setup-panel {
-    background: white;
-    border-radius: 24px;
-    padding: 40px;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.08);
-    max-width: 560px;
-    margin: 0 auto;
-    animation: fadeUp 0.5s ease;
-  }
+  /* SETUP */
+  .setup-panel { background:white; border-radius:24px; padding:40px; box-shadow:0 8px 32px rgba(0,0,0,0.08); max-width:560px; margin:0 auto; animation:fadeUp 0.5s ease; }
   @keyframes fadeUp { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
 
-  .setup-panel h2 { font-family:'Fredoka One',cursive; font-size:28px; color:var(--purple); margin-bottom:8px; }
-  .setup-panel p { color:var(--muted); font-size:15px; margin-bottom:28px; font-weight:600; }
+  .setup-panel h2 { font-family:'Fredoka One',cursive; font-size:28px; color:var(--purple); margin-bottom:6px; }
+  .setup-panel .desc { color:var(--muted); font-size:15px; margin-bottom:28px; font-weight:600; }
 
   .form-group { margin-bottom:20px; }
-  .form-group label { display:block; font-weight:800; font-size:14px; color:var(--navy); margin-bottom:8px; text-transform:uppercase; letter-spacing:0.5px; }
-  .form-group input, .form-group select {
-    width:100%; padding:14px 18px; border:2px solid #E0D9FF; border-radius:14px;
-    font-family:'Nunito',sans-serif; font-size:16px; font-weight:600; color:var(--text);
-    outline:none; transition:border-color 0.2s;
-    background: white;
-  }
+  .form-group label { display:block; font-weight:800; font-size:13px; color:var(--navy); margin-bottom:8px; text-transform:uppercase; letter-spacing:0.5px; }
+  .form-group input, .form-group select { width:100%; padding:14px 18px; border:2px solid #E0D9FF; border-radius:14px; font-family:'Nunito',sans-serif; font-size:16px; font-weight:600; color:var(--text); outline:none; transition:border-color 0.2s; background:white; }
   .form-group input:focus, .form-group select:focus { border-color:var(--purple); }
-
   .form-row { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
 
-  .btn-primary {
-    width:100%; padding:16px; background:linear-gradient(135deg, var(--purple), var(--purple-dark));
-    color:white; border:none; border-radius:16px; font-family:'Fredoka One',cursive; font-size:20px;
-    cursor:pointer; transition:all 0.2s; box-shadow:0 4px 16px rgba(124,77,255,0.4);
-  }
+  .btn-primary { width:100%; padding:16px; background:linear-gradient(135deg,var(--purple),var(--purple-dark)); color:white; border:none; border-radius:16px; font-family:'Fredoka One',cursive; font-size:20px; cursor:pointer; transition:all 0.2s; box-shadow:0 4px 16px rgba(124,77,255,0.4); }
   .btn-primary:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(124,77,255,0.5); }
-  .btn-primary:disabled { opacity:0.5; cursor:not-allowed; transform:none; }
 
-  /* SESSION ACTIVE */
+  /* SESSION */
   .session-active { display:none; }
-  .code-card {
-    background:linear-gradient(135deg, var(--purple), var(--purple-dark));
-    border-radius:24px; padding:32px; text-align:center; margin-bottom:24px; color:white;
-  }
-  .code-label { font-size:14px; font-weight:800; text-transform:uppercase; letter-spacing:1px; opacity:0.8; margin-bottom:8px; }
+
+  .code-card { background:linear-gradient(135deg,var(--purple),var(--purple-dark)); border-radius:24px; padding:32px; text-align:center; margin-bottom:24px; color:white; }
+  .code-label { font-size:13px; font-weight:800; text-transform:uppercase; letter-spacing:1px; opacity:0.8; margin-bottom:8px; }
   .code-value { font-family:'Fredoka One',cursive; font-size:72px; letter-spacing:8px; color:var(--sun); text-shadow:0 2px 12px rgba(0,0,0,0.2); }
-  .code-hint { font-size:14px; opacity:0.7; margin-top:8px; }
+  .code-hint { font-size:14px; opacity:0.75; margin-top:8px; font-weight:600; }
 
-  /* Stats row */
   .stats-row { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-bottom:24px; }
-  .stat-card {
-    background:white; border-radius:18px; padding:20px; text-align:center;
-    box-shadow:0 4px 16px rgba(0,0,0,0.07);
-  }
+  .stat-card { background:white; border-radius:18px; padding:20px; text-align:center; box-shadow:0 4px 16px rgba(0,0,0,0.07); }
   .stat-val { font-family:'Fredoka One',cursive; font-size:36px; }
-  .stat-label { font-size:13px; font-weight:800; color:var(--muted); text-transform:uppercase; }
-  .stat-card.students .stat-val { color:var(--purple); }
-  .stat-card.done .stat-val { color:var(--green); }
-  .stat-card.avg .stat-val { color:var(--coral); }
+  .stat-label { font-size:12px; font-weight:800; color:var(--muted); text-transform:uppercase; margin-top:4px; }
+  .stat-card.s1 .stat-val { color:var(--purple); }
+  .stat-card.s2 .stat-val { color:var(--green); }
+  .stat-card.s3 .stat-val { color:var(--coral); }
 
-  /* Controls */
   .controls { display:flex; gap:12px; margin-bottom:24px; flex-wrap:wrap; }
-  .btn-start {
-    flex:1; padding:16px; background:linear-gradient(135deg, var(--green), var(--green-dark));
-    color:white; border:none; border-radius:14px; font-family:'Fredoka One',cursive; font-size:18px;
-    cursor:pointer; transition:all 0.2s; box-shadow:0 4px 16px rgba(102,187,106,0.4);
-  }
+  .btn-start { flex:1; padding:16px; background:linear-gradient(135deg,var(--green),var(--green-dark)); color:white; border:none; border-radius:14px; font-family:'Fredoka One',cursive; font-size:18px; cursor:pointer; transition:all 0.2s; box-shadow:0 4px 16px rgba(102,187,106,0.4); }
   .btn-start:hover { transform:translateY(-2px); }
   .btn-start:disabled { opacity:0.4; cursor:not-allowed; transform:none; }
-  .btn-secondary {
-    padding:16px 24px; background:white; color:var(--purple); border:2px solid var(--purple);
-    border-radius:14px; font-family:'Fredoka One',cursive; font-size:16px;
-    cursor:pointer; transition:all 0.2s;
-  }
-  .btn-secondary:hover { background:var(--purple-light); }
+  .btn-sec { padding:16px 24px; background:white; color:var(--purple); border:2px solid var(--purple); border-radius:14px; font-family:'Fredoka One',cursive; font-size:16px; cursor:pointer; transition:all 0.2s; }
+  .btn-sec:hover { background:var(--purple-light); }
 
-  /* Students table */
   .students-section { background:white; border-radius:20px; padding:24px; box-shadow:0 4px 16px rgba(0,0,0,0.07); }
-  .section-title { font-family:'Fredoka One',cursive; font-size:20px; color:var(--navy); margin-bottom:16px; display:flex; align-items:center; gap:8px; }
+  .section-title { font-family:'Fredoka One',cursive; font-size:20px; color:var(--navy); margin-bottom:16px; }
   .table-wrap { overflow-x:auto; }
   table { width:100%; border-collapse:collapse; }
-  thead th { background:var(--purple-light); color:var(--purple-dark); font-weight:800; font-size:13px; text-transform:uppercase; padding:12px 16px; text-align:left; }
+  thead th { background:var(--purple-light); color:var(--purple-dark); font-weight:800; font-size:12px; text-transform:uppercase; padding:12px 16px; text-align:left; letter-spacing:0.5px; }
   tbody tr { border-bottom:1px solid #F0EAF8; transition:background 0.1s; }
   tbody tr:hover { background:#FAF8FF; }
   tbody td { padding:12px 16px; font-size:15px; font-weight:600; }
   .badge-done { background:#E8F5E9; color:#2E7D32; padding:4px 12px; border-radius:20px; font-size:12px; font-weight:800; }
   .badge-playing { background:#FFF3E0; color:#E65100; padding:4px 12px; border-radius:20px; font-size:12px; font-weight:800; }
   .badge-waiting { background:#EDE7F6; color:var(--purple); padding:4px 12px; border-radius:20px; font-size:12px; font-weight:800; }
-
   .pct-bar { display:flex; align-items:center; gap:8px; }
   .pct-track { flex:1; height:8px; background:#EEE; border-radius:4px; overflow:hidden; }
   .pct-fill { height:100%; background:linear-gradient(90deg,var(--green),#00C853); border-radius:4px; transition:width 0.5s; }
-
   .empty-state { text-align:center; padding:40px; color:var(--muted); font-size:16px; font-weight:600; }
   .empty-icon { font-size:48px; margin-bottom:12px; }
 
-  /* Export row */
   .export-row { display:flex; gap:10px; margin-top:16px; flex-wrap:wrap; }
-  .btn-export {
-    padding:10px 20px; background:white; border:2px solid #DDD; border-radius:12px;
-    font-family:'Nunito',sans-serif; font-weight:800; font-size:14px; cursor:pointer; transition:all 0.2s; text-decoration:none;
-    display:inline-flex; align-items:center; gap:6px; color:var(--text);
-  }
+  .btn-export { padding:10px 20px; background:white; border:2px solid #DDD; border-radius:12px; font-family:'Nunito',sans-serif; font-weight:800; font-size:14px; cursor:pointer; transition:all 0.2s; text-decoration:none; display:inline-flex; align-items:center; gap:6px; color:var(--text); }
   .btn-export:hover { border-color:var(--purple); color:var(--purple); }
 
-  /* Toast */
-  .toast {
-    position:fixed; bottom:30px; right:30px; background:#333; color:white; padding:14px 24px;
-    border-radius:14px; font-weight:700; font-size:15px; z-index:999; opacity:0; transform:translateY(20px);
-    transition:all 0.3s; pointer-events:none;
-  }
+  .toast { position:fixed; bottom:30px; right:30px; background:#333; color:white; padding:14px 24px; border-radius:14px; font-weight:700; font-size:15px; z-index:999; opacity:0; transform:translateY(20px); transition:all 0.3s; pointer-events:none; }
   .toast.show { opacity:1; transform:translateY(0); }
   .toast.success { background:var(--green-dark); }
   .toast.error { background:var(--coral); }
 
-  /* Ping animation for new student */
-  @keyframes ping { 0%{transform:scale(1)} 50%{transform:scale(1.05); background:#F3E5F5} 100%{transform:scale(1)} }
-  .new-student { animation:ping 0.4s ease; }
+  /* Info chips */
+  .info-chips { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:24px; }
+  .chip { background:white; border-radius:12px; padding:10px 16px; font-size:13px; font-weight:800; color:var(--navy); box-shadow:0 2px 8px rgba(0,0,0,0.06); display:flex; align-items:center; gap:6px; }
 </style>
 </head>
 <body>
-
 <header>
-  <div class="logo">👩‍🏫 <span>Teacher</span> Be Going To</div>
-  <div class="header-right">
-    <a href="/" class="back-btn">🏠 Home</a>
-  </div>
+  <div class="logo">👩‍🏫 <span>Panel Docente</span> Be Going To</div>
+  <a href="/" class="back-btn">🏠 Inicio</a>
 </header>
 
 <div class="main">
 
-  <!-- SETUP -->
+  <!-- CONFIGURACIÓN -->
   <div class="setup-panel" id="setupPanel">
-    <h2>👩‍🏫 Create Session</h2>
-    <p>Configure your game and share the code with students!</p>
+    <h2>👩‍🏫 Crear Sesión</h2>
+    <p class="desc">Configura el juego y comparte el código con tus estudiantes 🎮</p>
 
     <div class="form-group">
-      <label>Your Name</label>
-      <input type="text" id="nombreDocente" placeholder="e.g. Ms. García" />
+      <label>📛 Tu Nombre</label>
+      <input type="text" id="nombreDocente" placeholder="Ej: Prof. García" />
     </div>
 
     <div class="form-row">
       <div class="form-group">
-        <label>Questions</label>
+        <label>❓ Número de Preguntas</label>
         <select id="numPreguntas">
-          <option value="5">5 questions</option>
-          <option value="10" selected>10 questions</option>
-          <option value="15">15 questions</option>
-          <option value="20">20 questions</option>
+          <option value="5">5 preguntas</option>
+          <option value="10" selected>10 preguntas</option>
+          <option value="15">15 preguntas</option>
+          <option value="20">20 preguntas</option>
         </select>
       </div>
       <div class="form-group">
-        <label>Time per question</label>
+        <label>⏱️ Tiempo por Pregunta</label>
         <select id="tiempoPorPregunta">
-          <option value="15">15 seconds</option>
-          <option value="20">20 seconds</option>
-          <option value="25" selected>25 seconds</option>
-          <option value="30">30 seconds</option>
+          <option value="15">15 segundos</option>
+          <option value="20">20 segundos</option>
+          <option value="25" selected>25 segundos</option>
+          <option value="30">30 segundos</option>
         </select>
       </div>
     </div>
 
     <div class="form-group">
-      <label>Question Type</label>
+      <label>📚 Tipo de Preguntas</label>
       <select id="tipoPreguntas">
-        <option value="mixed" selected>🎲 Mixed (all types)</option>
-        <option value="auxiliar">🔤 Auxiliary Verb (am/is/are)</option>
-        <option value="completacion">✏️ Fill in the Blank</option>
-        <option value="estructura">🏗️ Grammar Structure</option>
-        <option value="negativa">🚫 Negative Form</option>
-        <option value="traduccion">🇪🇸 Vocabulary (Spanish)</option>
+        <option value="mixed" selected>🎲 Mixto (todos los tipos)</option>
+        <option value="auxiliar">🔤 Verbo Auxiliar (am/is/are)</option>
+        <option value="completacion">✏️ Completar el espacio</option>
+        <option value="estructura">🏗️ Estructura Gramatical</option>
+        <option value="negativa">🚫 Forma Negativa</option>
+        <option value="traduccion">🇪🇸 Vocabulario (Español)</option>
       </select>
     </div>
 
-    <button class="btn-primary" onclick="crearSesion()">🚀 Create Session</button>
+    <button class="btn-primary" onclick="crearSesion()">🚀 Crear Sesión</button>
   </div>
 
-  <!-- SESSION ACTIVE -->
+  <!-- SESIÓN ACTIVA -->
   <div class="session-active" id="sessionPanel">
 
     <div class="code-card">
-      <div class="code-label">📌 Class Code — Share with students!</div>
+      <div class="code-label">📌 Código de Clase — ¡Comparte con tus estudiantes!</div>
       <div class="code-value" id="codigoDisplay">----</div>
-      <div class="code-hint">Students go to <strong>this URL → /alumno</strong> and enter this code</div>
+      <div class="code-hint">Los estudiantes van a <strong>/alumno</strong> e ingresan este código</div>
     </div>
 
+    <div class="info-chips" id="infoChips"></div>
+
     <div class="stats-row">
-      <div class="stat-card students">
+      <div class="stat-card s1">
         <div class="stat-val" id="totalAlumnos">0</div>
-        <div class="stat-label">👨‍🎓 Students</div>
+        <div class="stat-label">👨‍🎓 Estudiantes</div>
       </div>
-      <div class="stat-card done">
+      <div class="stat-card s2">
         <div class="stat-val" id="terminadosCount">0</div>
-        <div class="stat-label">✅ Finished</div>
+        <div class="stat-label">✅ Terminaron</div>
       </div>
-      <div class="stat-card avg">
-        <div class="stat-val" id="avgScore">-</div>
-        <div class="stat-label">📊 Avg Score</div>
+      <div class="stat-card s3">
+        <div class="stat-val" id="avgScore">—</div>
+        <div class="stat-label">📊 Prom. Puntaje</div>
       </div>
     </div>
 
     <div class="controls">
-      <button class="btn-start" id="btnIniciar" onclick="iniciarJuego()">▶️ Start Game!</button>
-      <button class="btn-secondary" onclick="reiniciar()">🔄 Reset</button>
+      <button class="btn-start" id="btnIniciar" onclick="iniciarJuego()">▶️ ¡Iniciar Juego!</button>
+      <button class="btn-sec" onclick="reiniciar()">🔄 Reiniciar</button>
     </div>
 
     <div class="students-section">
-      <div class="section-title">🏆 Leaderboard</div>
+      <div class="section-title">🏆 Tabla de Posiciones</div>
       <div class="table-wrap">
         <table id="studentsTable">
           <thead>
             <tr>
               <th>#</th>
-              <th>Student</th>
-              <th>Class</th>
-              <th>Score</th>
-              <th>Correct</th>
-              <th>%</th>
-              <th>Status</th>
+              <th>Nombre</th>
+              <th>Paralelo</th>
+              <th>Puntaje</th>
+              <th>Correctas</th>
+              <th>Porcentaje</th>
+              <th>Estado</th>
             </tr>
           </thead>
           <tbody id="studentsBody">
-            <tr><td colspan="7"><div class="empty-state"><div class="empty-icon">⏳</div>Waiting for students to join...</div></td></tr>
+            <tr><td colspan="7"><div class="empty-state"><div class="empty-icon">⏳</div>Esperando que los estudiantes se unan...</div></td></tr>
           </tbody>
         </table>
       </div>
       <div class="export-row">
-        <a href="/exportar-excel" class="btn-export">📊 Export Excel</a>
-        <a href="/exportar-txt" class="btn-export">📄 Export TXT</a>
+        <a href="/exportar-excel" class="btn-export">📊 Exportar Excel</a>
+        <a href="/exportar-txt" class="btn-export">📄 Exportar TXT</a>
       </div>
     </div>
 
@@ -287,26 +228,25 @@ function showToast(msg, type='') {
 
 function crearSesion() {
   const nombre = document.getElementById('nombreDocente').value.trim();
-  if (!nombre) { showToast('⚠️ Please enter your name!','error'); return; }
-  socket.emit('docente:crear_sesion', {
+  if (!nombre) { showToast('⚠️ Ingresa tu nombre primero', 'error'); return; }
+  const config = {
     nombreDocente: nombre,
     numPreguntas: parseInt(document.getElementById('numPreguntas').value),
     tiempoPorPregunta: parseInt(document.getElementById('tiempoPorPregunta').value),
     tipo: document.getElementById('tipoPreguntas').value
-  });
+  };
+  socket.emit('docente:crear_sesion', config);
 }
 
 socket.on('docente:sesion_creada', ({ codigo }) => {
   document.getElementById('codigoDisplay').textContent = codigo;
   document.getElementById('setupPanel').style.display = 'none';
   document.getElementById('sessionPanel').style.display = 'block';
-  showToast('✅ Session created! Code: ' + codigo, 'success');
+  showToast('✅ Sesión creada. Código: ' + codigo, 'success');
 });
 
 function iniciarJuego() {
-  if (Object.keys(students).length === 0) {
-    showToast('⚠️ No students joined yet!','error'); return;
-  }
+  if (Object.keys(students).length === 0) { showToast('⚠️ Ningún estudiante se ha unido aún', 'error'); return; }
   socket.emit('docente:iniciar_juego');
 }
 
@@ -314,102 +254,91 @@ socket.on('docente:juego_iniciado', ({ numPreguntas }) => {
   juegoIniciado = true;
   totalPreguntas = numPreguntas;
   document.getElementById('btnIniciar').disabled = true;
-  document.getElementById('btnIniciar').textContent = '🎮 Game in Progress...';
-  showToast('🚀 Game started! ' + numPreguntas + ' questions', 'success');
+  document.getElementById('btnIniciar').textContent = '🎮 Juego en progreso...';
+  showToast('🚀 ¡Juego iniciado! ' + numPreguntas + ' preguntas', 'success');
 });
 
 socket.on('docente:nuevo_alumno', ({ id, nombre, paralelo, edad, total }) => {
   students[id] = { nombre, paralelo, edad, puntaje:0, correctas:0, incorrectas:0, terminado:false };
   document.getElementById('totalAlumnos').textContent = total;
   renderTable();
-  showToast('🎉 ' + nombre + ' joined!', 'success');
+  showToast('🎉 ' + nombre + ' se unió al juego', 'success');
 });
 
-socket.on('docente:respuesta_alumno', ({ id, nombre, esCorrecta, puntaje, correctas, incorrectas }) => {
+socket.on('docente:respuesta_alumno', ({ id, puntaje, correctas, incorrectas }) => {
   if (students[id]) {
     students[id].puntaje = puntaje;
     students[id].correctas = correctas;
     students[id].incorrectas = incorrectas;
-    renderTable();
-    updateAvg();
+    renderTable(); updateAvg();
   }
 });
 
-socket.on('docente:alumno_termino', ({ id, puntaje, correctas, terminados, total }) => {
+socket.on('docente:alumno_termino', ({ id, puntaje, correctas, terminados }) => {
   if (students[id]) {
     students[id].terminado = true;
     students[id].puntaje = puntaje;
     students[id].correctas = correctas;
     document.getElementById('terminadosCount').textContent = terminados;
-    renderTable();
-    updateAvg();
+    renderTable(); updateAvg();
+    showToast('🏁 ' + students[id].nombre + ' terminó el juego');
   }
 });
 
 socket.on('docente:alumno_desconectado', ({ id, nombre }) => {
   delete students[id];
-  const total = Object.keys(students).length;
-  document.getElementById('totalAlumnos').textContent = total;
+  document.getElementById('totalAlumnos').textContent = Object.keys(students).length;
   renderTable();
-  showToast('⚠️ ' + nombre + ' disconnected');
+  showToast('⚠️ ' + nombre + ' se desconectó');
 });
 
 socket.on('docente:reiniciado', () => {
-  Object.keys(students).forEach(k => {
-    students[k].puntaje = 0; students[k].correctas = 0;
-    students[k].incorrectas = 0; students[k].terminado = false;
-  });
+  Object.keys(students).forEach(k => { students[k].puntaje=0; students[k].correctas=0; students[k].incorrectas=0; students[k].terminado=false; });
   juegoIniciado = false;
   document.getElementById('btnIniciar').disabled = false;
-  document.getElementById('btnIniciar').textContent = '▶️ Start Game!';
+  document.getElementById('btnIniciar').textContent = '▶️ ¡Iniciar Juego!';
   document.getElementById('terminadosCount').textContent = '0';
-  document.getElementById('avgScore').textContent = '-';
+  document.getElementById('avgScore').textContent = '—';
   renderTable();
-  showToast('🔄 Game reset!');
+  showToast('🔄 Juego reiniciado');
 });
 
 function updateAvg() {
   const vals = Object.values(students).map(s => s.puntaje);
-  if (vals.length === 0) return;
-  const avg = Math.round(vals.reduce((a,b)=>a+b,0)/vals.length);
-  document.getElementById('avgScore').textContent = avg;
+  if (!vals.length) return;
+  document.getElementById('avgScore').textContent = Math.round(vals.reduce((a,b)=>a+b,0)/vals.length);
 }
 
 function renderTable() {
   const tbody = document.getElementById('studentsBody');
   const list = Object.entries(students).sort((a,b) => b[1].puntaje - a[1].puntaje);
-  if (list.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="7"><div class="empty-state"><div class="empty-icon">⏳</div>Waiting for students to join...</div></td></tr>';
+  if (!list.length) {
+    tbody.innerHTML = '<tr><td colspan="7"><div class="empty-state"><div class="empty-icon">⏳</div>Esperando que los estudiantes se unan...</div></td></tr>';
     return;
   }
-  const medals = ['🥇','🥈','🥉'];
+  const medallas = ['🥇','🥈','🥉'];
   tbody.innerHTML = list.map(([id, s], i) => {
     const total = totalPreguntas || 1;
-    const pct = totalPreguntas ? Math.round((s.correctas / total) * 100) : 0;
-    const statusBadge = s.terminado
-      ? '<span class="badge-done">✅ Done</span>'
+    const pct = totalPreguntas ? Math.round((s.correctas/total)*100) : 0;
+    const estado = s.terminado
+      ? '<span class="badge-done">✅ Terminó</span>'
       : juegoIniciado
-        ? '<span class="badge-playing">🎮 Playing</span>'
-        : '<span class="badge-waiting">⏳ Waiting</span>';
+        ? '<span class="badge-playing">🎮 Jugando</span>'
+        : '<span class="badge-waiting">⏳ Esperando</span>';
     return `<tr>
-      <td>${medals[i] || (i+1)}</td>
+      <td><strong>${medallas[i]||('#'+(i+1))}</strong></td>
       <td><strong>${s.nombre}</strong></td>
       <td>${s.paralelo}</td>
-      <td><strong style="color:var(--purple)">${s.puntaje}</strong></td>
-      <td>${s.correctas}/${totalPreguntas || '?'}</td>
-      <td>
-        <div class="pct-bar">
-          <div class="pct-track"><div class="pct-fill" style="width:${pct}%"></div></div>
-          <span style="font-size:13px;font-weight:800;color:var(--green-dark)">${pct}%</span>
-        </div>
-      </td>
-      <td>${statusBadge}</td>
+      <td><strong style="color:var(--purple);font-size:17px">${s.puntaje}</strong></td>
+      <td>${s.correctas}/${totalPreguntas||'?'}</td>
+      <td><div class="pct-bar"><div class="pct-track"><div class="pct-fill" style="width:${pct}%"></div></div><span style="font-size:13px;font-weight:800;color:var(--green-dark)">${pct}%</span></div></td>
+      <td>${estado}</td>
     </tr>`;
   }).join('');
 }
 
 function reiniciar() {
-  if (!confirm('Reset the game for all students?')) return;
+  if (!confirm('¿Reiniciar el juego para todos los estudiantes?')) return;
   socket.emit('docente:reiniciar');
 }
 </script>
